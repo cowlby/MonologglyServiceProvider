@@ -31,7 +31,7 @@ Registering
 
 Make sure you place a copy of Monolog and Monologgly in the vendor directory:
 
-	$app->register(new Monologgly\Provider\MonologglyServiceProvider, array(
+	$app->register(new Monologgly\Silex\Provider\MonologglyServiceProvider, array(
 	    'loggly.input_key'      => '83e527d7-fad3-4d93-89da-0c2d8c0bcd6c',
 	    'loggly.input_format'   => 'json',
 	    'monolog.class_path'    => __DIR__.'/vendor/monolog/src',

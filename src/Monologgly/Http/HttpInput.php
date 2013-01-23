@@ -22,7 +22,7 @@ class HttpInput implements LogglyInput
      * @param string $key
      * @param string $format
      */
-    public function __construct($key, $format = static::FORMAT_JSON)
+    public function __construct($key, $format = self::FORMAT_JSON)
     {
         $this->key = $key;
         $this->setFormat($format);
