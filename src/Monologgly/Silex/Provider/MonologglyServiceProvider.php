@@ -5,12 +5,14 @@ namespace Monologgly\Silex\Provider;
 use Monolog\Logger;
 
 use Monologgly\LogglyInput;
-use Monologgly\HttpInput;
-use Monologgly\AsyncHttpLogger;
+use Monologgly\Http\HttpInput;
+use Monologgly\Http\AsyncHttpLogger;
 use Monologgly\Handler\LogglyHandler;
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class MonologglyServiceProvider implements ServiceProviderInterface
@@ -68,11 +70,7 @@ class MonologglyServiceProvider implements ServiceProviderInterface
 
     public function boot(Application $app)
     {
-        $app->before(function (Request $request) use ($app) {
-            $app['monolog']->addInfo('> '.$request->getMethod().' '.$request->getRequestUri());
-        });
-
-        $app->error(function (\Exception $e) use ($app) {
+        $app->error(function(\Exception $e) use ($app) {
             $message = sprintf('%s: %s (uncaught exception) at %s line %s', get_class($e), $e->getMessage(), $e->getFile(), $e->getLine());
             if ($e instanceof HttpExceptionInterface && $e->getStatusCode() < 500) {
                 $app['monolog']->addError($message);
@@ -80,9 +78,5 @@ class MonologglyServiceProvider implements ServiceProviderInterface
                 $app['monolog']->addCritical($message);
             }
         }, 255);
-
-        $app->after(function (Request $request, Response $response) use ($app) {
-            $app['monolog']->addInfo('< '.$response->getStatusCode());
-        });
     }
 }
