@@ -1,0 +1,25 @@
+{
+    "name": "pradador/Monologgly",
+    "type": "library",
+    "description": "Monologgly, a Monolog Loggly handler",
+    "keywords": ["monolog", "loggly"],
+    "time": "2013-01-22",
+    "homepage": "https://github.com/pradador/modomo",
+    "license": "??",
+    "authors": [
+        {
+            "name": "Jose Prado",
+            "homepage": "https://github.com/pradador"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-0": { "Monologgly": "src/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}
