@@ -65,4 +65,24 @@ class MonologglyServiceProvider implements ServiceProviderInterface
             $log->pushHandler($app['monologgly.handler']);
         });
     }
+
+    public function boot(Application $app)
+    {
+        $app->before(function (Request $request) use ($app) {
+            $app['monolog']->addInfo('> '.$request->getMethod().' '.$request->getRequestUri());
+        });
+
+        $app->error(function (\Exception $e) use ($app) {
+            $message = sprintf('%s: %s (uncaught exception) at %s line %s', get_class($e), $e->getMessage(), $e->getFile(), $e->getLine());
+            if ($e instanceof HttpExceptionInterface && $e->getStatusCode() < 500) {
+                $app['monolog']->addError($message);
+            } else {
+                $app['monolog']->addCritical($message);
+            }
+        }, 255);
+
+        $app->after(function (Request $request, Response $response) use ($app) {
+            $app['monolog']->addInfo('< '.$response->getStatusCode());
+        });
+    }
 }
